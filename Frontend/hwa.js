@@ -131,7 +131,6 @@ d3.csv('../Data/athlete_events.csv', function(error, data) {
 		//	$("ageval").innerText = age;
 			var data1 = data1.filter(function(d) { return d.Age == age &&
 				d.Sex == sex});
-			console.log(data1.length);
 			var none = data1.filter(function(d) {
 				d.Medal == 0
 			}).length;
@@ -149,7 +148,7 @@ d3.csv('../Data/athlete_events.csv', function(error, data) {
 				.duration(0)
 				.call(yAxis);
 
-			var bar = svg.selectAll(".bar")
+			/*var bar = svg.selectAll(".bar")
 				.data(data1, function(d) {return d.ID;})
 
 			bar.exit().remove();
@@ -165,6 +164,14 @@ d3.csv('../Data/athlete_events.csv', function(error, data) {
 				.attr("y", function(d) { return y(d.Count)})
 				.attr("height", function(d) { return y(0) - y(d.Count)})
 			*/
+			//Removes rectangles and text on update
+			svg.selectAll('.bargroup').remove();
+
+            var bar = svg.selectAll('.bar')
+                .data(data1, function(d) {return d.ID;});
+
+            var barGroups = bar.enter().append('g')
+                .attr("class", "bargroup");
 
 			//Creates a new g element
 			var barGroups = bar.enter().append('g');
@@ -196,7 +203,6 @@ d3.csv('../Data/athlete_events.csv', function(error, data) {
 				if($("medals").checked) {
 					//Bronze, Silver, Gold
 					var counts = [0,0,0];
-					console.log(dataSet)
 					for (var i = 0; i < dataSet.length; i++) {
 						if(dataSet[i].Medal != 0)
 						 	counts[dataSet[i].Medal-1]++;
@@ -219,7 +225,6 @@ d3.csv('../Data/athlete_events.csv', function(error, data) {
 				} else {
 					//None, Bronze, Silver, Gold
 					var counts = [0,0,0,0];
-					console.log(dataSet)
 					for (var i = 0; i < dataSet.length; i++) {
 						 counts[dataSet[i].Medal]++;
 					}
@@ -243,7 +248,6 @@ d3.csv('../Data/athlete_events.csv', function(error, data) {
 			 			]
 							$("total").innerText = counts[0]+counts[1]+counts[2]+counts[3];
 					}
-					console.log(theData);
 					return theData;
 			 }
 
