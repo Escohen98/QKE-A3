@@ -57,23 +57,54 @@ d3.csv('../Data/athlete_events.csv', function(error, data) {
 
 		//End Building Frame
 
-		var years = [...new Set(data.map(function(d) { return d.Year; }))].sort();
-		var medals = [...new Set(data.map(function(d) { return d.Medal; }))]
-		var age = [...new Set(data.map(function(d) { return d.Age; }))].sort()
-		var options = d3.select("#Year").selectAll("option")
-			.data(years)
+		var heights = [...new Set(data.map(function(d) { return d.Height; }))].sort();
+		var weights = [...new Set(data.map(function(d) { return d.Weight; }))].sort();
+		var ages = [...new Set(data.map(function(d) { return d.Age; }))].sort()
+		var optionsA = d3.select("#age").selectAll("option")
+			.data(ages)
+		.enter().append("option")
+			.text(function(d) {return d;})
+		var optionsW = d3.select("#weight").selectAll("option")
+			.data(weights)
+		.enter().append("option")
+			.text(function(d) {return d;})
+		var optionsH = d3.select("#height").selectAll("option")
+			.data(heights)
 		.enter().append("option")
 			.text(function(d) {return d;})
 
-		var select = d3.select("#Year")
+		var selectA = d3.select("#age")
 			.on("change", function() {
-				update(data, this.Medal)
+				var age = this.value;
+				var height = d3.select("#height").property("value");
+				var wieght = d3.select("#weight").property("value");
+				update(data, age, height, weight);
 			})
 
-		update(data, d3.select("#Year").property("Medal"))
+		var selectW = d3.select("#weight")
+			.on("change", function() {
+				var height = this.value;
+				var age = d3.select("#age").property("value");
+				var wieght = d3.select("#weight").property("value");
+				update(data, age, height, weight);
+			})
 
-		function update(data2, years) {
-			var data1 = data2.filter(function(d) { return d.Year == years})
+		var selectH = d3.select("#height")
+			.on("change", function() {
+				var weight = this.value;
+				var age = d3.select("#age").property("value");
+				var height = d3.select("#height").property("value");
+				update(data, age, height, weight);
+			})
+
+		update(data, d3.select("#age").property("value"),
+			d3.select("#weight").property("value"),
+			d3.select("#height").property("value"));
+
+		function update(data2, age, weight, height) {
+			var data1 = data2.filter(function(d) { return d.Age == age &&
+				d.Weight == weight && d.Height == height});
+			console.log(data1);
 			x.domain(data1.map(function(d) {return d.ID;}))
 			y.domain([0, d3.max(data1, function(d) {return d.Medal;})]).nice()
 
