@@ -155,7 +155,7 @@ d3.csv('../Data/athlete_events.csv', function(error, data) {
 			bar.exit().remove();
 
 			//Appends Rextangles to Graph
-			bar.enter().append("rect")
+		/*	bar.enter().append("rect")
 				.attr("class", "bar")
 				.attr("fill", "steelblue")
 				.attr("width", x.bandwidth())
@@ -164,8 +164,30 @@ d3.csv('../Data/athlete_events.csv', function(error, data) {
 				.attr("x", function(d) { return x(d.Medal)})
 				.attr("y", function(d) { return y(d.Count)})
 				.attr("height", function(d) { return y(0) - y(d.Count)})
-			}
+			*/
 
+			//Creates a new g element
+			var barGroups = bar.enter().append('g');
+    				//Appends rectangles (bars) to g elemnent
+            barGroups.append("rect")
+                .attr("class", "bar")
+                .attr("fill", "steelblue")
+                .attr("width", x.bandwidth())
+                .merge(bar)
+                .transition().duration(1000)
+                .attr("x", function(d) { return x(d.Medal)})
+                .attr("y", function(d) { return y(d.Count)})
+                .attr("height", function(d) { return y(0) - y(d.Count)});
+
+						//Appends corresponding text values to g element
+            barGroups.append('text')
+                .attr('class', 'value')
+                .attr('x', (d) => x(d.Medal) + x.bandwidth() / 2)
+                .attr('y', (d) => y(d.Count) + 20)
+                .attr('text-anchor', 'middle')
+                .text((a) => `${a.Count}`);
+
+			}
 
 			//Counts all medals in given dataSet and returns new dataset containing
 			//count of each medal and its count in the previous dataset.
