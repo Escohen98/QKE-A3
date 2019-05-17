@@ -115,7 +115,16 @@ d3.csv('../Data/athlete_events.csv', function(error, data) {
 		update(data, d3.select("#age").property("value"),
 			d3.select("#sex").property("value"));
 
+	var slider = $("age");
+	var output = document.getElementById("ageval");
+	output.innerHTML = slider.value; // Display the default slider value
+
+	// Update the current slider value (each time you drag the slider handle)
+	slider.oninput = function() {
+	  output.innerHTML = this.value;
+	}
 		function update(data1, age, sex) {
+		//	$("ageval").innerText = age;
 			var data1 = data1.filter(function(d) { return d.Age == age &&
 				d.Sex == sex});
 			console.log(data1.length);
@@ -151,6 +160,7 @@ d3.csv('../Data/athlete_events.csv', function(error, data) {
 				.attr("y", function(d) { return y(d.Count)})
 				.attr("height", function(d) { return y(0) - y(d.Count)})
 			}
+
 
 			//Counts all medals in given dataSet and returns new dataset containing
 			//count of each medal and its count in the previous dataset.
