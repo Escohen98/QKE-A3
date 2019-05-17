@@ -40,9 +40,12 @@ d3.csv('../Data/athlete_events.csv', function(error, data) {
 		})
 
 	//Start Building Frame
-	var margin = {top: 25, bottom: 10, left: 25, right: 25},
-	width = 700 - margin.left - margin.right,
-	height = 400 - margin.top - margin.bottom;
+
+	//Frame Dimensions
+	var mult = 2;
+	var margin = {top: 25*mult, bottom: 10*mult, left: 25*mult, right: 25*mult},
+	width = 700*mult - margin.left - margin.right,
+	height = 400*mult - margin.top - margin.bottom;
 
 	var svg = d3.select("body").append("svg")
 	    .attr("width", width + margin.left + margin.right)
@@ -112,6 +115,7 @@ d3.csv('../Data/athlete_events.csv', function(error, data) {
 				update(data, age, sex);
 			})
 
+		//Initial Update (onLoad)
 		update(data, d3.select("#age").property("value"),
 			d3.select("#sex").property("value"));
 
@@ -150,6 +154,7 @@ d3.csv('../Data/athlete_events.csv', function(error, data) {
 
 			bar.exit().remove();
 
+			//Appends Rextangles to Graph
 			bar.enter().append("rect")
 				.attr("class", "bar")
 				.attr("fill", "steelblue")

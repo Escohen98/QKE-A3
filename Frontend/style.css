@@ -53,3 +53,9 @@
 body > div {
   margin-top: 10px;
 }
+
+body > p {
+  padding-bottom: 2em;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+}
