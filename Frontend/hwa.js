@@ -203,7 +203,7 @@ d3.csv('../Data/athlete_events.csv', function(error, data) {
             barGroups.append('text')
                 .attr('class', 'value')
                 .attr('x', (d) => x(d.Medal) + x.bandwidth() / 2)
-                .attr('y', (d) => y(d.Count) + 20)
+                .attr('y', (d) => y(d.Count) - 10)
                 .attr('text-anchor', 'middle')
                 .text((a) => `${a.Count}`);
 
