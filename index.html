@@ -6,14 +6,25 @@
 	</head>
 
 	<body>
-			<div> Choose Age:
+			<div> <input id="avis" type="checkbox" checked = "checked"> Age:
 				<input type="range" min="10" max="97" value="50" class="slider" id="age">
-				<span id="ageval">50</span> years</div>
-			<div> Choose Sex: <select id="sex"></select> </div>
+				<span class ="val" id="ageval">50</span> years
+			</div>
+			<div> <input id="hvis" type="checkbox" checked = "checked"> Height:
+				<input type="range" min="127" max="226" value="150" class="slider" id="height">
+				<span class ="val" id="heightval">50</span> cm
+			</div>
+			<div> <input id="wvis" type="checkbox" checked = "checked"> Weight:
+				<input type="range" min="25" max="214" value="50" class="slider" id="weight">
+				<span class ="val" id="weightval">50</span> kg
+			</div>
+			<div> Sex: <select id="sex"></select> </div>
 			<div> Only Medals? <input id="medals" type="checkbox"> </div>
 			<p>Total Number of Olympians: <span id="total">0</span></p>
 	</body>
 
 	<script src="Frontend/hwa.js"></script>
-
+	<footer>
+		&copy 2019 by Eric Cohen for INFO 474 A3 at University of Washington
+	</footer>
 </html>
