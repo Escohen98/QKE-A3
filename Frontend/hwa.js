@@ -1,15 +1,21 @@
 d3.csv('../Data/athlete_events.csv', function(error, data) {
 	console.log(data[1].ID)
 	data.forEach(function(d) {
-			countries = d.Team.split("-");
-			d.ID = countries[0];
-			d.Year = +d.Year;
-			d.Age = +d.Age;
-			d.Season = +d.Season;
-			d.Weight = +d.Weight;
-			d.Medal = +d.Medal;
-			d.Height = +d.Height;
+			d.ID = +d.ID;
+			d.Name = +d.Name;
 			d.Sex = +d.Sex;
+			d.Age = +d.Age;
+			d.Height = +d.Height;
+			d.Weight = +d.Weight;
+			d.Team = +d.Team;
+			d.NOC = +d.NOC;
+			d.Games = +d.Games;
+			d.Year = +d.Year;
+			d.Season = +d.Season;
+			d.City = +d.City;
+			d.Sport = +d.Sport;
+			d.Event = +d.Event;
+			d.Medal = +d.Medal;
 			return d;
 		})
 
@@ -52,7 +58,8 @@ d3.csv('../Data/athlete_events.csv', function(error, data) {
 		//End Building Frame
 
 		var years = [...new Set(data.map(function(d) { return d.Year; }))].sort();
-		console.log(years.sort())
+		var medals = [...new Set(data.map(function(d) { return d.Medal; }))]
+		console.log(data)
 		var options = d3.select("#Year").selectAll("option")
 			.data(years)
 		.enter().append("option")
