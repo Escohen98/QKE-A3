@@ -156,7 +156,7 @@ d3.csv('../Data/athlete_events.csv', function(error, data) {
 			//count of each medal and its count in the previous dataset.
 			function groupMedals(dataSet) {
 				//Case only medals
-				if( document.getElementById("medals").checked) {
+				if($("medals").checked) {
 					//Bronze, Silver, Gold
 					var counts = [0,0,0];
 					console.log(dataSet)
@@ -178,6 +178,7 @@ d3.csv('../Data/athlete_events.csv', function(error, data) {
 			 					Count: counts[2]
 			 				}
 			 			]
+						$("total").innerText = counts[0]+counts[1]+counts[2];
 				} else {
 					//None, Bronze, Silver, Gold
 					var counts = [0,0,0,0];
@@ -203,8 +204,14 @@ d3.csv('../Data/athlete_events.csv', function(error, data) {
 			 					Count: counts[3]
 			 				}
 			 			]
+							$("total").innerText = counts[0]+counts[1]+counts[2]+counts[3];
 					}
 					console.log(theData);
 					return theData;
+			 }
+
+			 //Helper function to get element by id.
+			 function $(id) {
+				 return document.getElementById(id);
 			 }
 	})
