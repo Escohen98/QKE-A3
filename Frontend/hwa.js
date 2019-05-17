@@ -88,6 +88,7 @@ d3.csv('../Data/athlete_events.csv', function(error, data) {
 		.enter().append("option")
 			.text(function(d) {return d;})
 
+		//Age box changes
 		var selectA = d3.select("#age")
 			.on("change", function() {
 				var age = this.value;
@@ -95,6 +96,7 @@ d3.csv('../Data/athlete_events.csv', function(error, data) {
 				update(data, age, sex);
 			})
 
+		//Sex box changes
 		var selectS = d3.select("#sex")
 			.on("change", function() {
 				var sex = this.value;
@@ -102,19 +104,27 @@ d3.csv('../Data/athlete_events.csv', function(error, data) {
 				update(data, age, sex);
 			})
 
+		//When checkbox event change
+		var selectM = d3.select("#medals")
+			.on("change", function() {
+				var sex = d3.select("#sex").property("value");
+				var age = d3.select("#age").property("value");
+				update(data, age, sex);
+			})
+
 		update(data, d3.select("#age").property("value"),
 			d3.select("#sex").property("value"));
 
-		function update(data2, age, sex) {
-			var data1 = data2.filter(function(d) { return d.Age == age &&
+		function update(data1, age, sex) {
+			var data1 = data1.filter(function(d) { return d.Age == age &&
 				d.Sex == sex});
 			console.log(data1.length);
 			var none = data1.filter(function(d) {
 				d.Medal == 0
 			}).length;
-			groupMedals(data1);
+			data1 = groupMedals(data1);
 			x.domain(data1.map(function(d) { return d.Medal;}))
-			y.domain([0, d3.max(data1, function(d) {return d.Medal;})]).nice()
+			y.domain([0, d3.max(data1, function(d) {return d.Count;})]).nice()
 
 			svg.selectAll(".x-axis")
 				.transition()
@@ -138,37 +148,62 @@ d3.csv('../Data/athlete_events.csv', function(error, data) {
 				.merge(bar)
 				.transition().duration(1000)
 				.attr("x", function(d) { return x(d.Medal)})
-				.attr("y", function(d) { return y(d.Medal)})
-				.attr("height", function(d) { return y(0) - y(d.Medal)})
+				.attr("y", function(d) { return y(d.Count)})
+				.attr("height", function(d) { return y(0) - y(d.Count)})
 			}
 
 			//Counts all medals in given dataSet and returns new dataset containing
 			//count of each medal and its count in the previous dataset.
 			function groupMedals(dataSet) {
-				//None, Bronze, Silver, Gold
-				var counts = [0,0,0,0];
-				console.log(dataSet)
-				for (var i = 0; i < dataSet.length; i++) {
-					 counts[dataSet[i].Medal]++;
-				}
-					 var theData = [
-		 				{
-		 					Medal: "None",
-		 					Count: counts[0]
-		 				},
-		 				{
-		 					Medal: "Bronze",
-		 					Count: counts[1]
-		 				},
-		 				{
-		 					Medal: "Silver",
-		 					Count: counts[2]
-		 				},
-		 				{
-		 					Medal: "Gold",
-		 					Count: counts[3]
-		 				}
-		 			]
+				//Case only medals
+				if( document.getElementById("medals").checked) {
+					//Bronze, Silver, Gold
+					var counts = [0,0,0];
+					console.log(dataSet)
+					for (var i = 0; i < dataSet.length; i++) {
+						if(dataSet[i].Medal != 0)
+						 	counts[dataSet[i].Medal-1]++;
+						}
+						 var theData = [
+			 				{
+			 					Medal: "Bronze",
+			 					Count: counts[0]
+			 				},
+			 				{
+			 					Medal: "Silver",
+			 					Count: counts[1]
+			 				},
+			 				{
+			 					Medal: "Gold",
+			 					Count: counts[2]
+			 				}
+			 			]
+				} else {
+					//None, Bronze, Silver, Gold
+					var counts = [0,0,0,0];
+					console.log(dataSet)
+					for (var i = 0; i < dataSet.length; i++) {
+						 counts[dataSet[i].Medal]++;
+					}
+						 var theData = [
+			 				{
+			 					Medal: "None",
+			 					Count: counts[0]
+			 				},
+			 				{
+			 					Medal: "Bronze",
+			 					Count: counts[1]
+			 				},
+			 				{
+			 					Medal: "Silver",
+			 					Count: counts[2]
+			 				},
+			 				{
+			 					Medal: "Gold",
+			 					Count: counts[3]
+			 				}
+			 			]
+					}
 					console.log(theData);
 					return theData;
 			 }
