@@ -1,17 +1,19 @@
-d3.csv('../Data/athlete_events0.csv', function(error, data) {
+d3.csv('../Data/athlete_events.csv', function(error, data) {
+	console.log(data[1].ID)
 	data.forEach(function(d) {
 			countries = d.Team.split("-");
-			d.country = countries[0];
-			d.year = +d.Year;
-			d.age = +d.Age;
-			d.season = +d.Season;
-			d.weight = +d.Weight;
-			d.medal = +d.Medal;
-			d.height = +d.Height;
-			d.sex = +d.Sex;
+			d.ID = countries[0];
+			d.Year = +d.Year;
+			d.Age = +d.Age;
+			d.Season = +d.Season;
+			d.Weight = +d.Weight;
+			d.Medal = +d.Medal;
+			d.Height = +d.Height;
+			d.Sex = +d.Sex;
 			return d;
 		})
 
+	//Start Building Frame
 	var margin = {top: 25, bottom: 10, left: 25, right: 25},
 	width = 700 - margin.left - margin.right,
 	height = 400 - margin.top - margin.bottom;
@@ -47,25 +49,26 @@ d3.csv('../Data/athlete_events0.csv', function(error, data) {
 			.attr("class", "y-axis")
 			.call(yAxis)
 
-		var years = [...new Set(data.map(function(d) { return d.year; }))]
-		console.log(years)
-		var options = d3.select("#year").selectAll("option")
+		//End Building Frame
+
+		var years = [...new Set(data.map(function(d) { return d.Year; }))].sort();
+		console.log(years.sort())
+		var options = d3.select("#Year").selectAll("option")
 			.data(years)
 		.enter().append("option")
 			.text(function(d) {return d;})
 
-		var select = d3.select("#year")
+		var select = d3.select("#Year")
 			.on("change", function() {
-				update(data, this.medal)
+				update(data, this.Medal)
 			})
 
-		update(data, d3.select("#year").property("medal"))
+		update(data, d3.select("#Year").property("Medal"))
 
-		function update(data, years) {
-			var data = data.filter(function(d) { return d.year == years})
-
-			x.domain(data.map(function(d) {return d.country;}))
-			y.domain([0, d3.max(data, function(d) {return d.medal;})]).nice()
+		function update(data2, years) {
+			var data1 = data2.filter(function(d) { return d.Year == years})
+			x.domain(data1.map(function(d) {return d.ID;}))
+			y.domain([0, d3.max(data1, function(d) {return d.Medal;})]).nice()
 
 			svg.selectAll(".x-axis")
 				.transition()
@@ -78,7 +81,7 @@ d3.csv('../Data/athlete_events0.csv', function(error, data) {
 				.call(yAxis);
 
 			var bar = svg.selectAll(".bar")
-				.data(data, function(d) {return d.country;})
+				.data(data1, function(d) {return d.ID;})
 
 			bar.exit().remove();
 
@@ -88,9 +91,9 @@ d3.csv('../Data/athlete_events0.csv', function(error, data) {
 				.attr("width", x.bandwidth())
 				.merge(bar)
 				.transition().duration(1000)
-				.attr("x", function(d) { return x(d.country)})
-				.attr("y", function(d) { return y(d.medal)})
-				.attr("height", function(d) { return y(0) - y(d.medal)})
+				.attr("x", function(d) { return x(d.ID)})
+				.attr("y", function(d) { return y(d.Medal)})
+				.attr("height", function(d) { return y(0) - y(d.Medal)})
 			}
 
 		})
