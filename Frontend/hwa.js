@@ -1,5 +1,4 @@
 d3.csv('../Data/athlete_events.csv', function(error, data) {
-	console.log(data)
 
 	//Filters out NA values for wanted columns
 //	data = data.filter(function(el) {
@@ -263,13 +262,10 @@ d3.csv('../Data/athlete_events.csv', function(error, data) {
 				var height = d3.select("#height").property("value");
 				var data2 = data1;
 				if($("avis").checked) {
-					console.log("Hit1")
 					data2 = data2.filter(function(d) { return d.Age == age });
 				} if($("hvis").checked) {
-					console.log("Hit2")
 					data2 = data2.filter(function(d) { return d.Height == height });
 				} if($("wvis").checked) {
-					console.log("Hit3")
 					data2 = data2.filter(function(d) { return d.Weight == weight });
 				}
 				//test = data2.filter(function(d) { return d.Age == max(d.Age)});
