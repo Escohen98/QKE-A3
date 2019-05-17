@@ -57,53 +57,37 @@ d3.csv('../Data/athlete_events.csv', function(error, data) {
 
 		//End Building Frame
 
-		var heights = [...new Set(data.map(function(d) { return d.Height; }))].sort();
-		var weights = [...new Set(data.map(function(d) { return d.Weight; }))].sort();
 		var ages = [...new Set(data.map(function(d) { return d.Age; }))].sort()
+		var sexes = [...new Set(data.map(function(d) {return d.Sex; }))]
 		var optionsA = d3.select("#age").selectAll("option")
 			.data(ages)
 		.enter().append("option")
 			.text(function(d) {return d;})
-		var optionsW = d3.select("#weight").selectAll("option")
-			.data(weights)
-		.enter().append("option")
-			.text(function(d) {return d;})
-		var optionsH = d3.select("#height").selectAll("option")
-			.data(heights)
+		var optionsS = d3.select("#sex").selectAll("option")
+			.data(sexes)
 		.enter().append("option")
 			.text(function(d) {return d;})
 
 		var selectA = d3.select("#age")
 			.on("change", function() {
 				var age = this.value;
-				var height = d3.select("#height").property("value");
-				var wieght = d3.select("#weight").property("value");
-				update(data, age, height, weight);
+				var sex = d3.select("#sex").property("value");
+				update(data, age, sex);
 			})
 
-		var selectW = d3.select("#weight")
+		var selectS = d3.select("#sex")
 			.on("change", function() {
-				var height = this.value;
+				var sex = this.value;
 				var age = d3.select("#age").property("value");
-				var wieght = d3.select("#weight").property("value");
-				update(data, age, height, weight);
-			})
-
-		var selectH = d3.select("#height")
-			.on("change", function() {
-				var weight = this.value;
-				var age = d3.select("#age").property("value");
-				var height = d3.select("#height").property("value");
-				update(data, age, height, weight);
+				update(data, age, sex);
 			})
 
 		update(data, d3.select("#age").property("value"),
-			d3.select("#weight").property("value"),
-			d3.select("#height").property("value"));
+			d3.select("#sex").property("value"));
 
-		function update(data2, age, weight, height) {
+		function update(data2, age, sex) {
 			var data1 = data2.filter(function(d) { return d.Age == age &&
-				d.Weight == weight && d.Height == height});
+				d.Sex == sex});
 			console.log(data1);
 			x.domain(data1.map(function(d) {return d.ID;}))
 			y.domain([0, d3.max(data1, function(d) {return d.Medal;})]).nice()
