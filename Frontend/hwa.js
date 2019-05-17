@@ -124,14 +124,26 @@ d3.csv('../Data/athlete_events.csv', function(error, data) {
 		.enter().append("option")
 			.text(function(d) {return d;})
 
-		//Year box changes
+		//Year Slider changes
 		var selectY = d3.select("#year")
 			.on("change", function() {
 				update(data);
 			})
 
-		//Age box changes
+		//Age Slider changes
 		var selectA = d3.select("#age")
+			.on("change", function() {
+				update(data);
+			})
+
+		//Height Slider changes
+		var selectH = d3.select("#height")
+			.on("change", function() {
+				update(data);
+			})
+
+		//Weight Slider changes
+		var selectW = d3.select("#weight")
 			.on("change", function() {
 				update(data);
 			})
