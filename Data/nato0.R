@@ -9,3 +9,4 @@ height <- data$Height[!is.na(data$Height)]
 #min(height)
 #max(width)
 #min(width)
+#
