@@ -78,6 +78,40 @@ d3.csv('../Data/athlete_events.csv', function(error, data) {
 			.attr("class", "y-axis")
 			.call(yAxis)
 
+		//Axis Labels
+			//Taken from http://bl.ocks.org/phoebebright/3061203
+
+		 // now rotate text on x axis
+	   // solution based on idea here: https://groups.google.com/forum/?fromgroups#!topic/d3-js/heOBPQF3sAY
+	   // first move the text left so no longer centered on the tick
+	   // then rotate up to get 45 degrees.
+	   svg.selectAll(".xaxis text")  // select all the text elements for the xaxis
+	     .attr("transform", function(d) {
+	        return "translate(" + this.getBBox().height*-2 + "," + this.getBBox().height + ")rotate(-45)";
+	    });
+		var padding = 0;
+	   // now add titles to the axes
+
+		 //y-axis
+	   svg.append("text")
+	       .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
+	       .attr("transform", "translate("+ (padding/2) +","+(height/2)+")rotate(-90)")  // text is drawn off the screen top left, move down and out and rotate
+	       .text("Number of Olympians");
+		//x-axis
+	   svg.append("text")
+	       .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
+	       .attr("transform", "translate("+ (width/2) +","+(height+(20))+")")  // centre below axis
+	       .text("Medal");
+
+		//title
+			//Taken from http://www.d3noob.org/2013/01/adding-title-to-your-d3js-graph.html
+		svg.append("text")
+        .attr("x", (width / 2))
+        .attr("y", 0 - (margin.top / 2))
+        .attr("text-anchor", "middle")
+        .style("font-size", "25px")
+        .style("text-decoration", "underline")
+        .text("Number of Olympians vs Medal");
 		//End Building Frame
 
 		var ages = [...new Set(data.map(function(d) { return d.Age; }))].sort()
