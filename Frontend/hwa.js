@@ -1,5 +1,11 @@
 d3.csv('../Data/athlete_events.csv', function(error, data) {
 	console.log(data)
+
+	//Filters out NA values for wanted columns
+//	data = data.filter(function(el) {
+  //      return !isNaN(el.ID) && !isNaN(el.Age) && !isNaN(el.Sex);
+    //});
+
 	data.forEach(function(d) {
 			d.ID = +d.ID;
 			d.Name = d.Name;
@@ -15,7 +21,21 @@ d3.csv('../Data/athlete_events.csv', function(error, data) {
 			d.City = d.City;
 			d.Sport = d.Sport;
 			d.Event = d.Event;
-			d.Medal = d.Medal;
+			switch(d.Medal) {
+							 case "Bronze":
+									 d.Medal = 1;
+									 break;
+							 case "Silver":
+									 d.Medal = 2;
+									 break;
+							 case "Gold":
+									 d.Medal = 3;
+									 break;
+							 case "NA":
+							 default:
+									 d.Medal = 0;
+									 break;
+					 }
 			return d;
 		})
 
@@ -89,7 +109,11 @@ d3.csv('../Data/athlete_events.csv', function(error, data) {
 			var data1 = data2.filter(function(d) { return d.Age == age &&
 				d.Sex == sex});
 			console.log(data1);
-			x.domain(data1.map(function(d) {return d.ID;}))
+			var none = data1.filter(function(d) {
+				d.Medal == 0
+			}).length;
+			console.log("none:" + none);
+			x.domain(data1.map(function(d) {return d.Medal;}))
 			y.domain([0, d3.max(data1, function(d) {return d.Medal;})]).nice()
 
 			svg.selectAll(".x-axis")
@@ -113,7 +137,7 @@ d3.csv('../Data/athlete_events.csv', function(error, data) {
 				.attr("width", x.bandwidth())
 				.merge(bar)
 				.transition().duration(1000)
-				.attr("x", function(d) { return x(d.ID)})
+				.attr("x", function(d) { return x(d.Medal)})
 				.attr("y", function(d) { return y(d.Medal)})
 				.attr("height", function(d) { return y(0) - y(d.Medal)})
 			}
