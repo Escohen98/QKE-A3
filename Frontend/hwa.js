@@ -146,21 +146,21 @@ d3.csv('../Data/athlete_events.csv', function(error, data) {
 		//When age checkbox event change
 		var checkA = d3.select("#avis")
 			.on("change", function() {
-				hide("age");
+				hide("ahide");
 				update(data);
 			})
 
 		//When height checkbox event change
 		var checkH = d3.select("#hvis")
 			.on("change", function() {
-				hide("height");
+				hide("hhide");
 				update(data);
 			})
 
 		//When weight checkbox event change
 		var checkW = d3.select("#wvis")
 			.on("change", function() {
-				hide("weight");
+				hide("whide");
 				update(data);
 			})
 
@@ -273,7 +273,6 @@ d3.csv('../Data/athlete_events.csv', function(error, data) {
 					data2 = data2.filter(function(d) { return d.Weight == weight });
 				}
 				//test = data2.filter(function(d) { return d.Age == max(d.Age)});
-				//console.log(test);
 				return data2;
 			}
 

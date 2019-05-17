@@ -7,16 +7,22 @@
 
 	<body>
 			<div> <input id="avis" type="checkbox" checked = "checked"> Age:
-				<input type="range" min="10" max="97" value="50" class="slider" id="age">
-				<span class ="val" id="ageval">50</span> years
+				<span id="ahide">
+					<input type="range" min="10" max="97" value="50" class="slider" id="age">
+					<span class ="val" id="ageval">50</span> years
+				<span>
 			</div>
 			<div> <input id="hvis" type="checkbox"> Height:
-				<input type="range" min="127" max="226" value="150" class="slider hidden" id="height">
-				<span class ="val" id="heightval">50</span> cm
+				<span id="hhide" class="hidden">
+					<input type="range" min="127" max="226" value="150" class="slider" id="height">
+					<span class ="val" id="heightval">50</span> cm
+				</span>
 			</div>
 			<div> <input id="wvis" type="checkbox"> Weight:
-				<input type="range" min="25" max="214" value="50" class="slider hidden" id="weight">
-				<span class ="val" id="weightval">50</span> kg
+				<span id="whide" class="hidden">
+					<input type="range" min="25" max="214" value="50" class="slider" id="weight">
+					<span class ="val" id="weightval">50</span> kg
+				</span>
 			</div>
 			<div> Sex: <select id="sex"></select> </div>
 			<div> Only Medals? <input id="medals" type="checkbox"> </div>
