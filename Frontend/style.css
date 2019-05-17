@@ -50,6 +50,10 @@
   color: red;
 }
 
+.hidden {
+  display: none
+}
+
 body > div {
   margin-top: 10px;
 }

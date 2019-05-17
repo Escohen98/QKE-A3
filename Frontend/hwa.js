@@ -128,40 +128,75 @@ d3.csv('../Data/athlete_events.csv', function(error, data) {
 		//Age box changes
 		var selectA = d3.select("#age")
 			.on("change", function() {
-				var age = this.value;
-				var sex = d3.select("#sex").property("value");
-				update(data, age, sex);
+				update(data);
 			})
 
 		//Sex box changes
 		var selectS = d3.select("#sex")
 			.on("change", function() {
-				var sex = this.value;
-				var age = d3.select("#age").property("value");
-				update(data, age, sex);
+				update(data);
 			})
 
-		//When checkbox event change
+		//When medal checkbox event change
 		var selectM = d3.select("#medals")
 			.on("change", function() {
-				var sex = d3.select("#sex").property("value");
-				var age = d3.select("#age").property("value");
-				update(data, age, sex);
+				update(data);
 			})
+
+		//When age checkbox event change
+		var checkA = d3.select("#medals")
+			.on("change", function() {
+				hide("age");
+				update(data);
+			})
+
+		//When height checkbox event change
+		var checkH = d3.select("#medals")
+			.on("change", function() {
+				hide("height");
+				update(data);
+			})
+
+		//When weight checkbox event change
+		var checkW = d3.select("#medals")
+			.on("change", function() {
+				hide("weight");
+				update(data);
+			})
+
 
 		//Initial Update (onLoad)
 		update(data, d3.select("#age").property("value"),
 			d3.select("#sex").property("value"));
 
-	var slider = $("age");
-	var output = document.getElementById("ageval");
-	output.innerHTML = slider.value; // Display the default slider value
+	var aslider = $("age"); //Slider for Age
+	var hslider = $("height"); //Slider for Height
+	var wslider = $("weight"); //Slider for 1
+	var aoutput = document.getElementById("ageval"); //Output value for age
+	var houtput = document.getElementById("heightval"); //Output value for height
+	var woutput = document.getElementById("weightval"); //Output value for weight
 
+	aoutput.innerHTML = aslider.value; // Display the default slider value
+	houtput.innerHTML = hslider.value;
+	woutput.innerHTML = wslider.value;
 	// Update the current slider value (each time you drag the slider handle)
-	slider.oninput = function() {
-	  output.innerHTML = this.value;
+	//Realtime
+	aslider.oninput = function() {
+	  aoutput.innerHTML = this.value;
 	}
-		function update(data1, age, sex) {
+	hslider.oninput = function() {
+	  houtput.innerHTML = this.value;
+	}
+	wslider.oninput = function() {
+	  woutput.innerHTML = this.value;
+	}
+
+
+		function update(data1) {
+			var sex = d3.select("#sex").property("value");
+			var age = d3.select("#age").property("value");
+			var weight = d3.select("#weight").property("value");
+			var height = d3.select("#height").property("value");
 		//	$("ageval").innerText = age;
 			var data1 = data1.filter(function(d) { return d.Age == age &&
 				d.Sex == sex});
@@ -182,26 +217,6 @@ d3.csv('../Data/athlete_events.csv', function(error, data) {
 				.duration(0)
 				.call(yAxis);
 
-			/*var bar = svg.selectAll(".bar")
-				.data(data1, function(d) {return d.ID;})
-
-			bar.exit().remove();
-
-			//Appends Rextangles to Graph
-		/*	bar.enter().append("rect")
-				.attr("class", "bar")
-				.attr("fill", "steelblue")
-				.attr("width", x.bandwidth())
-				.merge(bar)
-				.transition().duration(1000)
-				.attr("x", function(d) { return x(d.Medal)})
-				.attr("y", function(d) { return y(d.Count)})
-				.attr("height", function(d) { return y(0) - y(d.Count)})
-
-				//Creates a new g element
-				var barGroups = bar.enter().append('g');
-			*/
-			//Removes rectangles and text on update
 			svg.selectAll('.bargroup').remove();
 
             var bar = svg.selectAll('.bar')
@@ -240,6 +255,12 @@ d3.csv('../Data/athlete_events.csv', function(error, data) {
                 .attr('y', (d) => y(d.Count) - 10)
                 .attr('text-anchor', 'middle')
                 .text((a) => `${a.Count}`);
+
+			}
+
+			//Filters data based on what is checked.
+			//Returns filtered data.
+			function filterData(data1) {
 
 			}
 
@@ -301,5 +322,10 @@ d3.csv('../Data/athlete_events.csv', function(error, data) {
 			 //Helper function to get element by id.
 			 function $(id) {
 				 return document.getElementById(id);
+			 }
+
+			 //Helper function to toggle hiding given dom element.
+			 function hide(id) {
+				 $(id).classList.toggle('hidden');
 			 }
 	})
