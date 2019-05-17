@@ -7,6 +7,7 @@ d3.csv('../Data/athlete_events.csv', function(error, data) {
     //});
 
 	data.forEach(function(d) {
+			var countries = d.Team.split("-");
 			d.ID = +d.ID;
 			d.Name = d.Name;
 			d.Sex = d.Sex;
@@ -14,6 +15,7 @@ d3.csv('../Data/athlete_events.csv', function(error, data) {
 			d.Height = +d.Height;
 			d.Weight = +d.Weight;
 			d.Team = d.Team;
+			d.Country = countries[0];
 			d.NOC = d.NOC;
 			d.Games = d.Games;
 			d.Year = +d.Year;
@@ -116,6 +118,9 @@ d3.csv('../Data/athlete_events.csv', function(error, data) {
 
 		var ages = [...new Set(data.map(function(d) { return d.Age; }))].sort()
 		var sexes = [...new Set(data.map(function(d) {return d.Sex; }))]
+		sexes.unshift("Both");
+		var countries = [...new Set(data.map(function(d) { return d.Country; }))].sort()
+		countries.unshift("Any");
 		var optionsA = d3.select("#age").selectAll("option")
 			.data(ages)
 		.enter().append("option")
@@ -124,7 +129,10 @@ d3.csv('../Data/athlete_events.csv', function(error, data) {
 			.data(sexes)
 		.enter().append("option")
 			.text(function(d) {return d;})
-
+		var optionsC = d3.select("#country").selectAll("option")
+			.data(countries)
+		.enter().append("option")
+			.text(function(d) {return d;})
 		//Year Slider changes
 		var selectY = d3.select("#year")
 			.on("change", function() {
@@ -149,8 +157,14 @@ d3.csv('../Data/athlete_events.csv', function(error, data) {
 				update(data);
 			})
 
-		//Sex box changes
+		//Sex Dropdown changes
 		var selectS = d3.select("#sex")
+			.on("change", function() {
+				update(data);
+			})
+
+		//Country Dropdown changes
+		var selectC = d3.select("#country")
 			.on("change", function() {
 				update(data);
 			})
@@ -192,7 +206,8 @@ d3.csv('../Data/athlete_events.csv', function(error, data) {
 
 		//Initial Update (onLoad)
 		update(data, d3.select("#age").property("value"),
-			d3.select("#sex").property("value"));
+			d3.select("#sex").property("value"),
+			d3.select("#country").property("value"));
 
 	var yslider = $("year"); //Slider for year
 	var aslider = $("age"); //Slider for Age
@@ -224,14 +239,17 @@ d3.csv('../Data/athlete_events.csv', function(error, data) {
 	}
 
 
-		function update(data1) {
+		function update(data) {
 			var sex = d3.select("#sex").property("value");
-		//	$("ageval").innerText = age;
-			var data1 = data1.filter(function(d) { return d.Sex == sex});
-			var data1 = filterData(data1);
-			/*var none = data1.filter(function(d) {
-				d.Medal == 0
-			}).length;*/
+			var country = d3.select("#country").property("value");
+			var data1 = data;
+			if(sex != "Both") {
+				data1 = data1.filter(function(d) { return d.Sex == sex});
+			} if(country != "Any") {
+				data1 = data1.filter(function(d) { return d.Country == country});
+			}
+			data1 = filterData(data1);
+
 			data1 = groupMedals(data1);
 			x.domain(data1.map(function(d) { return d.Medal;}))
 			y.domain([0, d3.max(data1, function(d) {return d.Count;})]).nice()
