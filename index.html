@@ -6,8 +6,14 @@
 	</head>
 
 	<body>
-			<div> <input id="avis" type="checkbox" checked = "checked"> Age:
-				<span id="ahide">
+		<div> <input id="yvis" type="checkbox" checked = "checked"> Year:
+			<span id="yhide">
+				<input type="range" min="1896" max="2016" value="1950" step="4" class="slider" id="year">
+				<span class ="val" id="yearval">1950</span>
+			<span>
+		</div>
+			<div> <input id="avis" type="checkbox"> Age:
+				<span id="ahide" class="hidden">
 					<input type="range" min="10" max="97" value="50" class="slider" id="age">
 					<span class ="val" id="ageval">50</span> years
 				<span>
@@ -15,7 +21,7 @@
 			<div> <input id="hvis" type="checkbox"> Height:
 				<span id="hhide" class="hidden">
 					<input type="range" min="127" max="226" value="150" class="slider" id="height">
-					<span class ="val" id="heightval">50</span> cm
+					<span class ="val" id="heightval">150</span> cm
 				</span>
 			</div>
 			<div> <input id="wvis" type="checkbox"> Weight:

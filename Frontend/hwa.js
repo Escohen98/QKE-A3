@@ -124,6 +124,12 @@ d3.csv('../Data/athlete_events.csv', function(error, data) {
 		.enter().append("option")
 			.text(function(d) {return d;})
 
+		//Year box changes
+		var selectY = d3.select("#year")
+			.on("change", function() {
+				update(data);
+			})
+
 		//Age box changes
 		var selectA = d3.select("#age")
 			.on("change", function() {
@@ -139,6 +145,13 @@ d3.csv('../Data/athlete_events.csv', function(error, data) {
 		//When medal checkbox event change
 		var selectM = d3.select("#medals")
 			.on("change", function() {
+				update(data);
+			})
+
+		//When year checkbox event change
+		var checkY = d3.select("#yvis")
+			.on("change", function() {
+				hide("yhide");
 				update(data);
 			})
 
@@ -168,18 +181,25 @@ d3.csv('../Data/athlete_events.csv', function(error, data) {
 		update(data, d3.select("#age").property("value"),
 			d3.select("#sex").property("value"));
 
+	var yslider = $("year"); //Slider for year
 	var aslider = $("age"); //Slider for Age
 	var hslider = $("height"); //Slider for Height
 	var wslider = $("weight"); //Slider for 1
+	var youtput = document.getElementById("yearval"); //Output value for year
 	var aoutput = document.getElementById("ageval"); //Output value for age
 	var houtput = document.getElementById("heightval"); //Output value for height
 	var woutput = document.getElementById("weightval"); //Output value for weight
 
+	//Possibly redundant
+	youtput.innerHTML = yslider.value;
 	aoutput.innerHTML = aslider.value; // Display the default slider value
 	houtput.innerHTML = hslider.value;
 	woutput.innerHTML = wslider.value;
 	// Update the current slider value (each time you drag the slider handle)
 	//Realtime
+	yslider.oninput = function() {
+		youtput.innerHTML = this.value;
+	}
 	aslider.oninput = function() {
 	  aoutput.innerHTML = this.value;
 	}
@@ -257,11 +277,14 @@ d3.csv('../Data/athlete_events.csv', function(error, data) {
 			//Filters data based on what is checked.
 			//Returns filtered data.
 			function filterData(data1) {
+				var year = d3.select("#year").property("value");
 				var age = d3.select("#age").property("value");
 				var weight = d3.select("#weight").property("value");
 				var height = d3.select("#height").property("value");
 				var data2 = data1;
-				if($("avis").checked) {
+				if($("yvis").checked) {
+					data2 = data2.filter(function(d) { return d.Year == year });
+				} if($("avis").checked) {
 					data2 = data2.filter(function(d) { return d.Age == age });
 				} if($("hvis").checked) {
 					data2 = data2.filter(function(d) { return d.Height == height });
