@@ -178,7 +178,19 @@ d3.csv('../Data/athlete_events.csv', function(error, data) {
     				//Appends rectangles (bars) to g elemnent
             barGroups.append("rect")
                 .attr("class", "bar")
-                .attr("fill", "steelblue")
+                .attr("fill",  function(d) {
+                    switch(d.Medal) {
+                        case "Bronze":
+                            return "#cd7f32";
+                        case "Silver":
+                            return "#c0c0c0";
+                        case "Gold":
+                            return "#ffd700";
+                        case "NA":
+                        default:
+                            return "gray";
+                    }
+                })
                 .attr("width", x.bandwidth())
                 .merge(bar)
                 .transition().duration(1000)
