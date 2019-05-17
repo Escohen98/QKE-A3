@@ -163,6 +163,9 @@ d3.csv('../Data/athlete_events.csv', function(error, data) {
 				.attr("x", function(d) { return x(d.Medal)})
 				.attr("y", function(d) { return y(d.Count)})
 				.attr("height", function(d) { return y(0) - y(d.Count)})
+
+				//Creates a new g element
+				var barGroups = bar.enter().append('g');
 			*/
 			//Removes rectangles and text on update
 			svg.selectAll('.bargroup').remove();
@@ -173,8 +176,6 @@ d3.csv('../Data/athlete_events.csv', function(error, data) {
             var barGroups = bar.enter().append('g')
                 .attr("class", "bargroup");
 
-			//Creates a new g element
-			var barGroups = bar.enter().append('g');
     				//Appends rectangles (bars) to g elemnent
             barGroups.append("rect")
                 .attr("class", "bar")
@@ -188,7 +189,7 @@ d3.csv('../Data/athlete_events.csv', function(error, data) {
                             return "#ffd700";
                         case "NA":
                         default:
-                            return "gray";
+                            return "steelblue";
                     }
                 })
                 .attr("width", x.bandwidth())
