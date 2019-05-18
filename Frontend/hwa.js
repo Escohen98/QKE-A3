@@ -1,12 +1,14 @@
 //Data source: https://www.kaggle.com/heesoo37/120-years-of-olympic-history-athletes-and-results
-d3.csv('https://zbtuw.org/QKE-A3/Data/athlete_events.csv', function(error, data) {
+//d3.csv('https://zbtuw.org/QKE-A3/Data/athlete_events.csv', function(error, data) {
 
 	//Filters out NA values for wanted columns
 //	data = data.filter(function(el) {
   //      return !isNaN(el.ID) && !isNaN(el.Age) && !isNaN(el.Sex);
     //});
 
-	data.forEach(function(d) {
+function process_bar(error, data) {
+
+		data.forEach(function(d) {
 			var countries = d.Team.split("-");
 			d.ID = +d.ID;
 			d.Name = d.Name;
@@ -390,4 +392,4 @@ d3.csv('https://zbtuw.org/QKE-A3/Data/athlete_events.csv', function(error, data)
 			 function hide(id) {
 				 $(id).classList.toggle('hidden');
 			 }
-	})
+	}

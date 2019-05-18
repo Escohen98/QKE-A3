@@ -1,5 +1,4 @@
-//Data source: https://www.kaggle.com/heesoo37/120-years-of-olympic-history-athletes-and-results
-d3.csv('https://zbtuw.org/QKE-A3/Data/athlete_events.csv', function(error, data) {
+function process_scatter(error, data) {
 
 	//Filters out NA values for wanted columns
 //	data = data.filter(function(el) {
@@ -45,7 +44,7 @@ d3.csv('https://zbtuw.org/QKE-A3/Data/athlete_events.csv', function(error, data)
 									 break;
 					 }
 			return d;
-		})
+		});
 
 	//Start Building Frame
 
@@ -55,7 +54,7 @@ d3.csv('https://zbtuw.org/QKE-A3/Data/athlete_events.csv', function(error, data)
 	width = 700*mult - margin.left - margin.right,
 	height = 400*mult - margin.top - margin.bottom;
 
-	var svg = d3.select("body div[id=scatter]").append("svg")
+	var svg = d3.select("main div[id=scatter]").append("svg")
 	    .attr("width", width + margin.left + margin.right)
 	    .attr("height", height + margin.top + margin.bottom)
 	    .attr("id", "chart")
@@ -140,10 +139,11 @@ d3.csv('https://zbtuw.org/QKE-A3/Data/athlete_events.csv', function(error, data)
             circles
             .attr("cx",data[x_var.property("value")]);
         }
-        x_col = data[x_var.property("value")]
+        
         //console.log(type(x_col));
-        //xScale.domain([d3.min(x_col), d3.max(x_col)])
-        xAxis.scale(xScale)
+        xScale.domain([d3.min(data, function(d){return d[x_var.property("value")];}), d3.max(data, function(d){return d[x_var.property("value")];})]);
+
+        xAxis.scale(xScale);
     });
 
     d3.select("#y_var")
@@ -160,33 +160,35 @@ d3.csv('https://zbtuw.org/QKE-A3/Data/athlete_events.csv', function(error, data)
         console.log("about to update circle cy");
         if(circles != null) {
             y_col = data[y_var.property("value")]
+
+            y_col = y_col || 0;
+
             console.log("updating circle cy");
             circles
             .attr("cy",y_col);
         }
-        //yScale.domain([d3.min(data[y_var.property("value")]), d3.max(data[y_var.property("value")])])
+        yScale.domain([d3.min(data, function(d){return d[y_var.property("value")];}), d3.max(data, function(d){return d[y_var.property("value")];})]);
         yAxis.scale(yScale)
-        console.log()
+        
     });
 
     ylabel.text(y_var.property("value"));
     xlabel.text(x_var.property("value"));
     svg.text(`${x_var.property("value")} vs ${y_var.property("value")}`);
 
-    circles = svg
+
+    circles = d3.select("body div[id=scatter] svg")
         .append("g")
-        .selectAll(".dot")
+        .selectAll("dot")
         .data(data)
         .enter()
         .append("circle")
-        .attr("class", "dot")
-        .style("fill", 0x0)
         .attr("r", 3)
         //xMap?
-        .attr("cx", data[x_var.property("value")])
-        .attr("cy", data[y_var.property("value")])
+        .attr("cx", function(d){return xScale(d[x_var.property("value")])})
+        .attr("cy", function(d){return yScale(d[y_var.property("value")])   });
+        
+        
 
     
-});
-
-
+}
