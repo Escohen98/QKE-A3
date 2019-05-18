@@ -137,13 +137,18 @@ function process_scatter(error, data) {
         if(circles != null) {
             console.log("updating circle cx");
             circles
-            .attr("cx",data[x_var.property("value")]);
+            .attr("cx", function(d){return xScale(d[x_var.property("value")])});
         }
         
         //console.log(type(x_col));
         xScale.domain([d3.min(data, function(d){return d[x_var.property("value")];}), d3.max(data, function(d){return d[x_var.property("value")];})]);
 
         xAxis.scale(xScale);
+
+        svg.selectAll(".x-axis")
+				.transition()
+				.duration(0)
+				.call(xAxis);
     });
 
     d3.select("#y_var")
@@ -169,6 +174,11 @@ function process_scatter(error, data) {
         }
         yScale.domain([d3.min(data, function(d){return d[y_var.property("value")];}), d3.max(data, function(d){return d[y_var.property("value")];})]);
         yAxis.scale(yScale)
+
+        svg.selectAll(".y-axis")
+            .transition()
+            .duration(0)
+            .call(yAxis);
         
     });
 
@@ -176,6 +186,22 @@ function process_scatter(error, data) {
     xlabel.text(x_var.property("value"));
     svg.text(`${x_var.property("value")} vs ${y_var.property("value")}`);
 
+
+    xScale.domain([d3.min(data, function(d){return d[x_var.property("value")];}), d3.max(data, function(d){return d[x_var.property("value")];})]);
+    xAxis.scale(xScale);
+    
+    yScale.domain([d3.min(data, function(d){return d[y_var.property("value")];}), d3.max(data, function(d){return d[y_var.property("value")];})]);
+    yAxis.scale(yScale)
+
+    svg.selectAll(".x-axis")
+				.transition()
+				.duration(0)
+				.call(xAxis)
+
+    svg.selectAll(".y-axis")
+        .transition()
+        .duration(0)
+        .call(yAxis);
 
     circles = d3.select("body div[id=scatter] svg")
         .append("g")
