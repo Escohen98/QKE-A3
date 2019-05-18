@@ -3,72 +3,304 @@
 	<head>
 		<meta charset="utf-8">
 		<script src="https://d3js.org/d3.v4.min.js"></script>
+		<!--<script src="https://d3js.org/d3-geo.v1.min.js"></script>
+		<script src="https://d3js.org/d3-selection.v1.min.js"></script>
+		<script src="https://d3js.org/d3-array.v1.min.js"></script>
+		<script src="https://d3js.org/topojson.v1.min.js"></script>
+		<script src="https://d3js.org/d3-collection.v0.1.min.js"></script>
+		<script src="https://d3js.org/d3-dispatch.v0.4.min.js"></script>
+		<script src="https://d3js.org/d3-dsv.v0.3.min.js"></script>
+		<script src="https://d3js.org/d3-request.v0.4.min.js"></script>
+		<script src="https://d3js.org/d3-queue.v3.min.js"></script>-->
+		
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 		<link rel="stylesheet" type="text/css" href="Frontend/style.css">
+		
+		<script type="text/javascript">
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', 'UA-941940-28']);
+			_gaq.push(['_trackPageview']);
+		  
+			(function() {
+			  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+			})();
+		  </script>
+		  
 	</head>
 
 	<body>
-		<ul class="nav nav-tabs">
-			<li class="nav-item">
-				<a class="nav-link active" href="#bar" data-toggle="tab" role="tab">Bar Graphs</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="#map" data-toggle="tab" role="tab">Map</a>
-			</li>
-			<li class="nav-item">
-				<a class="nav-link" href="#scatter" data-toggle="tab" role="tab">Scatter Plots</a>
-			</li>
-		</ul>
-		<div class="tab-content" id="myTabContent">
-			<div class="tab-pane fade show active" id="bar">
-				<div> 
-					<input id="yvis" type="checkbox" checked = "checked"> Year:
-					<span id="yhide">
-						<input type="range" min="1896" max="2016" value="1950" step="4" class="slider" id="year">
-						<span class ="val" id="yearval">1950</span>
-					<span>
+		<main>
+			<ul class="nav nav-tabs">
+				<li class="nav-item">
+					<a class="nav-link active" href="#bar" data-toggle="tab" role="tab">Bar Graphs</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="#map" data-toggle="tab" role="tab">Map</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="#scatter" data-toggle="tab" role="tab">Scatter Plots</a>
+				</li>
+			</ul>
+			<div class="tab-content" id="myTabContent">
+				<div class="tab-pane fade show active" id="bar">
+					<div> 
+						<input id="yvis" type="checkbox" checked = "checked"> Year:
+						<span id="yhide">
+							<input type="range" min="1896" max="2016" value="1950" step="4" class="slider" id="year">
+							<span class ="val" id="yearval">1950</span>
+						<span>
+					</div>
+					<div> 
+						<input id="avis" type="checkbox"> Age:
+						<span id="ahide" class="hidden">
+							<input type="range" min="10" max="97" value="50" class="slider" id="age">
+							<span class ="val" id="ageval">50</span> years
+						<span>
+					</div>
+					<div> 
+						<input id="hvis" type="checkbox"> Height:
+						<span id="hhide" class="hidden">
+							<input type="range" min="127" max="226" value="150" class="slider" id="height">
+							<span class ="val" id="heightval">150</span> cm
+						</span>
+					</div>
+					<div> 
+						<input id="wvis" type="checkbox"> Weight:
+						<span id="whide" class="hidden">
+							<input type="range" min="25" max="214" value="50" class="slider" id="weight">
+							<span class ="val" id="weightval">50</span> kg
+						</span>
+					</div>
+					<div> Sex: <select id="sex"></select> </div>
+					<div> Country: <select id="country">Any</select> </div>
+					<div> Only Medals? <input id="medals" type="checkbox"> </div>
+					<p>Total Number of Olympians: <span id="total">0</span></p>
 				</div>
-				<div> 
-					<input id="avis" type="checkbox"> Age:
-					<span id="ahide" class="hidden">
-						<input type="range" min="10" max="97" value="50" class="slider" id="age">
-						<span class ="val" id="ageval">50</span> years
-					<span>
+				<div class="tab-pane fade show" id="map">
+					<div id="top">
+					<!--     <h1>World Map in D3.js</h1>
+						<p>Country descriptions from CIA World Factbook, placed in tooltips. <a href="http://techslides.com/making-maps-from-cia-world-factbook/">Back to Article</a></p> -->
+					
+					</div>
+				
+					<h1>World Map with Olympics Medals</h1>
+					<div id = "top-field">
+						<div id="legend"></div>
+						<form id = "buttons">
+							<input TYPE="radio" name="year" value="df1980.csv" >1980
+							<input TYPE="radio" name="year" value="df1992.csv" >1992
+							<input TYPE="radio" name="year" value="df1996.csv" >1996
+							<input TYPE="radio" name="year" value="df2006.csv" >2006
+							<input TYPE="radio" name="year" value="df2016.csv" checked>2016
+						</form>
+					</div>
+					<div id="container"></div>
 				</div>
-				<div> 
-					<input id="hvis" type="checkbox"> Height:
-					<span id="hhide" class="hidden">
-						<input type="range" min="127" max="226" value="150" class="slider" id="height">
-						<span class ="val" id="heightval">150</span> cm
-					</span>
-				</div>
-				<div> 
-					<input id="wvis" type="checkbox"> Weight:
-					<span id="whide" class="hidden">
-						<input type="range" min="25" max="214" value="50" class="slider" id="weight">
-						<span class ="val" id="weightval">50</span> kg
-					</span>
-				</div>
-				<div> Sex: <select id="sex"></select> </div>
-				<div> Country: <select id="country">Any</select> </div>
-				<div> Only Medals? <input id="medals" type="checkbox"> </div>
-				<p>Total Number of Olympians: <span id="total">0</span></p>
-			</div>
-			<div class="tab-pane fade show" id="map">
-				<h1>Map</h1>
-			</div>
-			<div class="tab-pane fade show" id="scatter">
-				<h1>Scatter</h1>
-			</div>
-		</div>
+				<div class="tab-pane fade show" id="scatter">
+					<h1>Scatter</h1>
 
+					<label for="x_var">X Variable</label>
+					<select id="x_var"></select>
+					<label for="y_var">Y Variable</label>
+					<select id="y_var"></select>
+				</div>
+			</div>
+			<span>&copy 2019 by Eric Cohen, Quoc Dung Cao and Ken Long for INFO 474 A3 at University of Washington</span>
+		</main>
+		<!--<footer class="footer">
+			&copy 2019 by Eric Cohen, Quoc Dung Cao and Ken Long for INFO 474 A3 at University of Washington
+		</footer>-->
 	</body>
 
 	<script src="Frontend/hwa.js"></script>
-	<footer>
-		&copy 2019 by Eric Cohen for INFO 474 A3 at University of Washington
-	</footer>
+	<script src="Frontend/scatter.js"></script>
+<script>
+//queue
+(function(){
+  function n(n){function t(){for(;f=a<c.length&&n>p;){var u=a++,t=c[u],r=l.call(t,1);r.push(e(u)),++p,t[0].apply(null,r)}}function e(n){return function(u,l){--p,null==d&&(null!=u?(d=u,a=s=0/0,r()):(c[n]=l,--s?f||t():r()))}}function r(){null!=d?v(d):i?v(d,c):v.apply(null,[d].concat(c))}var o,f,i,c=[],a=0,p=0,s=0,d=null,v=u;return n||(n=1/0),o={defer:function(){return d||(c.push(arguments),++s,t()),o},await:function(n){return v=n,i=!1,s||r(),o},awaitAll:function(n){return v=n,i=!0,s||r(),o}}}function u(){}"undefined"==typeof module?self.queue=n:module.exports=n,n.version="1.0.4";var l=[].slice})();
+
+window.addEventListener("load", init);
+function init(){
+  updateMap("df2016.csv")
+  document.querySelectorAll("div[id=map] input").forEach(m => m.addEventListener("click", updatedf));
+}
+
+function updatedf(){
+  console.log(this.value);
+  updateMap(this.value);
+}
+var width = document.getElementById('container').offsetWidth-60;
+var height = width / 2;
+
+var topo,projection,path,svg,g;
+
+var tooltip = d3.select("body div[id=map]").append("div").attr("class", "tooltip hidden");
+
+setup(width,height);
+
+function setup(width,height){
+
+  projection = d3.geoMercator().translate([0, 0]).scale(width / 2 / Math.PI);
+
+  path = d3.geoPath().projection(projection);
+
+  svg = d3.select("#container").append("svg")
+      .attr("width", width)
+      .attr("height", height);
+
+  var outterg = svg.append("g").attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+  g = outterg.append("g").attr("id", "innerg");
+
+}
+function addCommas(nStr){
+  nStr += '';
+  x = nStr.split('.');
+  x1 = x[0];
+  x2 = x.length > 1 ? '.' + x[1] : '';
+  var rgx = /(\d+)(\d{3})/;
+  while (rgx.test(x1)) {
+    x1 = x1.replace(rgx, '$1' + ',' + '$2');
+  }
+  return x1 + x2;
+}
+
+function updateMap(file){
+  queue()
+      .defer(d3.json, "world-110m-cia.json")
+      .defer(d3.csv, file)
+      .await(ready);
+}
+
+
+function ready(error, world, Medal) {
+
+  var sorted = Medal.sort(function(a, b){ return d3.descending(parseInt(a.Medal), parseInt(b.Medal)); });
+  let maxPop = d3.max(Medal,(function(d) {return parseInt( d.Medal);}));
+  var split = [ 1, parseInt(maxPop/5), parseInt(2*maxPop/5), parseInt(3*maxPop/5), parseInt(4*maxPop/5), maxPop];
+  var colors = ["#F7FBFF","#DEEBF7","#C6DBEF","#6BAED6","#2171B5","#08306B"];
+  console.log(maxPop);
+  var color = d3.scaleThreshold()
+      .domain(split)
+      .range(colors);
+
+    topo = topojson.feature(world, world.objects.countries).features;
+
+    var country = d3.select("#innerg").selectAll(".country").data(topo);
+
+    //ofsets
+    var offsetL = document.getElementById('container').offsetLeft+30;
+    var offsetT =document.getElementById('container').offsetTop-30;
+
+    country.enter().insert("path")
+      .attr("class", "country")
+      .attr("d", path)
+      .attr("id", function(d,i) { return d.id; })
+      .attr("title", function(d,i) { return d.properties.name; })
+      .style("fill", function(d,i) { 
+        var m = Medal.filter(function(f){return f.country == d.id});
+        if(m.length>0){
+            return color(m[0].Medal);
+        }
+      })
+      .style("stroke", "#111")
+      .on("mousemove", function(d,i) {
+        var mouse = d3.mouse(svg.node()).map( function(d) { return parseInt(d); } );
+
+        var pop = ' | Medal: ';
+        var m = Medal.filter(function(f){return f.country == d.id});
+        if(m.length>0){
+          //pop += addCommas(m[0].Medal);
+          pop += (m[0].Medal);
+        } else {
+          pop += '0';
+        }
+
+        tooltip.classed("hidden", false)
+          .attr("style", "left:"+(mouse[0]+offsetL)+"px;top:"+(mouse[1]+offsetT)+"px")
+          .html(d.properties.name+pop);
+      })
+      .on("mouseout",  function(d,i) {
+        tooltip.classed("hidden", true);
+      });
+
+    //create a custom legend
+    var legend = '';
+
+    colors.forEach(function(f,i){
+      if(i==0){
+        var label = '0-'+addCommas(split[i]);
+      } else if(i==8){
+        var label = addCommas(split[i-1])+'-'+addCommas(sorted[0].Medal);
+      } else {
+        var label = addCommas(split[i-1])+'-'+addCommas(split[i]);
+      }
+      legend += '<div style="background:'+f+';"></div><label>'+label+'</label>';
+    });
+
+    d3.select("#legend").html(legend);
+
+
+    //create sorted html table
+    var table = d3.select("#info").append("table"),
+        thead = table.append("thead"),
+        tbody = table.append("tbody"),
+        theadtr = thead.append("tr");
+
+        theadtr.append("th").text("Country");
+        theadtr.append("th").text("Medal");
+
+    sorted.forEach(function(c){
+      //tbody.append("tr").html('<td>'+c.country+'</td><td>'+addCommas(c.population)+'</td>');
+      var cname = topo.filter(function(f){ return f.id == c.country });
+      if(cname.length>0){
+        tbody.append("tr").html('<td>'+cname[0].properties.name+'</td><td>'+addCommas(c.Medal)+'</td>');
+      }
+    });
+
+    //create a custom legend
+    var legend = '';
+    legend += '<p>Legend: </p>'
+    legend += '<div style="background:'+'#cccccc'+';"></div><label>'+0+'</label>';
+    colors.forEach(function(f,i){
+      if(i==0){
+        var label = '0-'+addCommas(split[i]);
+      } else if(i==8){
+        var label = addCommas(split[i-1])+'-'+addCommas(sorted[0].Medal);
+      } else {
+        var label = addCommas(split[i-1])+'-'+addCommas(split[i]);
+      }
+      legend += '<div style="background:'+f+';"></div><label>'+label+'</label>';
+    });
+
+    d3.select("#legend").html(legend);
+
+
+    //create sorted html table
+    var table = d3.select("#info").append("table"),
+        thead = table.append("thead"),
+        tbody = table.append("tbody"),
+        theadtr = thead.append("tr");
+
+        theadtr.append("th").text("Country");
+        theadtr.append("th").text("Medal");
+
+    sorted.forEach(function(c){
+      var cname = topo.filter(function(f){ return f.id == c.country });
+      if(cname.length>0){
+        tbody.append("tr").html('<td>'+cname[0].properties.name+'</td><td>'+addCommas(c.Medal)+'</td>');
+      }
+    });
+
+
+
+}
+</script>
+
+	
 </html>
