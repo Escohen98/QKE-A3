@@ -49,7 +49,7 @@ d3.csv('../Data/athlete_events.csv', function(error, data) {
 	width = 700*mult - margin.left - margin.right,
 	height = 400*mult - margin.top - margin.bottom;
 
-	var svg = d3.select("body").append("svg")
+	var svg = d3.select("body div[id=bar]").append("svg")
 	    .attr("width", width + margin.left + margin.right)
 	    .attr("height", height + margin.top + margin.bottom)
 	    .attr("id", "chart")

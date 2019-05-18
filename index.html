@@ -3,38 +3,68 @@
 	<head>
 		<meta charset="utf-8">
 		<script src="https://d3js.org/d3.v4.min.js"></script>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 		<link rel="stylesheet" type="text/css" href="Frontend/style.css">
 	</head>
 
 	<body>
-		<div> <input id="yvis" type="checkbox" checked = "checked"> Year:
-			<span id="yhide">
-				<input type="range" min="1896" max="2016" value="1950" step="4" class="slider" id="year">
-				<span class ="val" id="yearval">1950</span>
-			<span>
+		<ul class="nav nav-tabs">
+			<li class="nav-item">
+				<a class="nav-link active" href="#bar" data-toggle="tab" role="tab">Bar Graphs</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="#map" data-toggle="tab" role="tab">Map</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="#scatter" data-toggle="tab" role="tab">Scatter Plots</a>
+			</li>
+		</ul>
+		<div class="tab-content" id="myTabContent">
+			<div class="tab-pane fade show active" id="bar">
+				<div> 
+					<input id="yvis" type="checkbox" checked = "checked"> Year:
+					<span id="yhide">
+						<input type="range" min="1896" max="2016" value="1950" step="4" class="slider" id="year">
+						<span class ="val" id="yearval">1950</span>
+					<span>
+				</div>
+				<div> 
+					<input id="avis" type="checkbox"> Age:
+					<span id="ahide" class="hidden">
+						<input type="range" min="10" max="97" value="50" class="slider" id="age">
+						<span class ="val" id="ageval">50</span> years
+					<span>
+				</div>
+				<div> 
+					<input id="hvis" type="checkbox"> Height:
+					<span id="hhide" class="hidden">
+						<input type="range" min="127" max="226" value="150" class="slider" id="height">
+						<span class ="val" id="heightval">150</span> cm
+					</span>
+				</div>
+				<div> 
+					<input id="wvis" type="checkbox"> Weight:
+					<span id="whide" class="hidden">
+						<input type="range" min="25" max="214" value="50" class="slider" id="weight">
+						<span class ="val" id="weightval">50</span> kg
+					</span>
+				</div>
+				<div> Sex: <select id="sex"></select> </div>
+				<div> Country: <select id="country">Any</select> </div>
+				<div> Only Medals? <input id="medals" type="checkbox"> </div>
+				<p>Total Number of Olympians: <span id="total">0</span></p>
+			</div>
+			<div class="tab-pane fade show" id="map">
+				<h1>Map</h1>
+			</div>
+			<div class="tab-pane fade show" id="scatter">
+				<h1>Scatter</h1>
+			</div>
 		</div>
-			<div> <input id="avis" type="checkbox"> Age:
-				<span id="ahide" class="hidden">
-					<input type="range" min="10" max="97" value="50" class="slider" id="age">
-					<span class ="val" id="ageval">50</span> years
-				<span>
-			</div>
-			<div> <input id="hvis" type="checkbox"> Height:
-				<span id="hhide" class="hidden">
-					<input type="range" min="127" max="226" value="150" class="slider" id="height">
-					<span class ="val" id="heightval">150</span> cm
-				</span>
-			</div>
-			<div> <input id="wvis" type="checkbox"> Weight:
-				<span id="whide" class="hidden">
-					<input type="range" min="25" max="214" value="50" class="slider" id="weight">
-					<span class ="val" id="weightval">50</span> kg
-				</span>
-			</div>
-			<div> Sex: <select id="sex"></select> </div>
-			<div> Country: <select id="country">Any</select> </div>
-			<div> Only Medals? <input id="medals" type="checkbox"> </div>
-			<p>Total Number of Olympians: <span id="total">0</span></p>
+
 	</body>
 
 	<script src="Frontend/hwa.js"></script>
