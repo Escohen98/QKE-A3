@@ -1,5 +1,5 @@
 //Data source: https://www.kaggle.com/heesoo37/120-years-of-olympic-history-athletes-and-results
-d3.csv('../Data/athlete_events.csv', function(error, data) {
+d3.csv('https://zbtuw.org/QKE-A3/Data/athlete_events.csv', function(error, data) {
 
 	//Filters out NA values for wanted columns
 //	data = data.filter(function(el) {
