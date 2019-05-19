@@ -421,7 +421,7 @@ function process_scatter(error, data_iter, d3_elements) {
             .attr("style", "left:"+(mouse[0]+offsetL)+"px;top:"+(mouse[1]+offsetT)+"px;width:20%;opacity:25%;")
             .classed("text-truncate", true)
             .html(`ID: ${d.ID}<br>
-                    Name: ${d.Name}<br>
+                    Name: ${inv_names[d.Name]}<br>
                     Sex: ${inv_sex[d.Sex]}<br>
                     Age: ${d.Age}<br>
                     Height: ${d.Height}<br>
