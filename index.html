@@ -108,10 +108,13 @@
 				
 				<div class="tab-pane fade show" id="scatter">
 					<h1>Scatter</h1>
-
-					<label for="x_var">X Variable</label>
+					<h2 class="text-center">Hover over a point to see all details about it.</h2>
+					<span class="p-2">
+						<span>This is a random sample of</span><input style="width:fit-content;" id="samplesize" class="form-control d-inline" type="number" value="200" disabled><span>olympians.</span>
+					</span>
+					<label class="d-inline" for="x_var">X Variable</label>
 					<select id="x_var"></select>
-					<label for="y_var">Y Variable</label>
+					<label class="d-inline" for="y_var">Y Variable</label>
 					<select id="y_var"></select>
 				</div>
 			</div>
@@ -252,7 +255,7 @@ var color = d3.scaleThreshold()
 	} else {
 		var label = addCommas(split[i-1])+'-'+addCommas(split[i]);
 	}
-	legend += '<div style="background:'+f+';"></div><label>'+label+'</label>';
+	legend += '<div><div class="color" style="background:'+f+';"></div><label>'+label+'</label></div>';
 	});
 
 	d3.select("#legend").html(legend);
@@ -278,7 +281,7 @@ var color = d3.scaleThreshold()
 	//create a custom legend
 	var legend = '';
 	legend += '<p>Legend: </p>'
-	legend += '<div style="background:'+'#cccccc'+';"></div><label>'+0+'</label>';
+	legend += '<div><div class="color" style="background:'+'#cccccc'+';"></div><label>'+0+'</label></div>';
 	colors.forEach(function(f,i){
 	if(i==0){
 		var label = '0-'+addCommas(split[i]);
@@ -287,7 +290,7 @@ var color = d3.scaleThreshold()
 	} else {
 		var label = addCommas(split[i-1])+'-'+addCommas(split[i]);
 	}
-	legend += '<div style="background:'+f+';"></div><label>'+label+'</label>';
+	legend += '<div><div class="color" style="background:'+f+';"></div><label>'+label+'</label></div>';
 	});
 
 	d3.select("#legend").html(legend);

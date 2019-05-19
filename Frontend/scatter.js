@@ -1,11 +1,18 @@
-function process_scatter(error, data_iter) {
+function process_scatter(error, data_iter, d3_elements) {
 
+    
 	//Filters out NA values for wanted columns
 //	data = data.filter(function(el) {
   //      return !isNaN(el.ID) && !isNaN(el.Age) && !isNaN(el.Sex);
     //});
 
-    //var features = ["Sex", "Age", "Height", "Weight", ];
+    var reuse = d3_elements?true:false;
+
+    console.log(reuse);
+
+    if ( !reuse ) {
+        d3_elements = {};
+    }
 
     var features =null;
 
@@ -15,7 +22,17 @@ function process_scatter(error, data_iter) {
 
     var n = data.length;
 
-    for(i=0; i<500; i++){
+    var subsample_size_input = $("#samplesize");
+
+    var subsample_n = subsample_size_input.val();
+
+    subsample_size_input.on("input", ()=>{console.log(d3_elements);
+    //process_scatter(null, data_iter, d3_elements);
+    })
+
+    console.log(subsample_n);
+
+    for(i=0; i<subsample_n; i++){
         random_dist.push( parseInt(Math.random()*n) );
     }
 
@@ -35,7 +52,7 @@ function process_scatter(error, data_iter) {
         return inv_o;
     }
 
-    var sex = {"Male":0.2, "Female":0.5, "NA":0.8};
+    var sex = {"Male":0, "Female":1, "NA":2};
     var inv_sex = create_inv(sex);
     var medal = {"NA":0, "Bronze":1, "Silver":2, "Gold":3};
     var inv_medal = create_inv(medal);
@@ -50,6 +67,7 @@ function process_scatter(error, data_iter) {
     var event_codes = {};
     var games_codes = {};
     var NOC_codes = {};
+    var name_codes = {};
 
     function code_labels(coding, label) {
         if(!Object.keys(coding).includes(label)){
@@ -64,18 +82,18 @@ function process_scatter(error, data_iter) {
             d = data[index];
 
             if (features == null){
-                console.log(d)
                 features = Array.from(Object.keys(d));
             }
 
             var countries = ["NA"];
-
-            if(typeof(d.Team)==String)
+            
+            if(typeof(d.Team)=="string")
                 countries = d.Team.split("-");
             
             d.ID = +d.ID;
             
-            d.Name = d.Name;
+            code_labels(name_codes, d.Name)
+            d.Name = name_codes[d.Name];
             
             switch(d.Sex){
                 case "M":
@@ -100,6 +118,7 @@ function process_scatter(error, data_iter) {
             code_labels(teams, d.Team);
             d.Team = teams[d.Team];
 
+            d.Country = countries[0];
             code_labels(country_codes, countries[0])
             d.Country = country_codes[countries[0]];
 
@@ -149,6 +168,9 @@ function process_scatter(error, data_iter) {
     var inv_city = create_inv(city_codes);
     var inv_sport = create_inv(sport_codes);
     var inv_event = create_inv(event_codes);
+    var inv_NOC = create_inv(NOC_codes);
+    var inv_games = create_inv(games_codes);
+    var inv_names = create_inv(name_codes);
 
     var class_labels = {
         "Sex": inv_sex,
@@ -159,6 +181,9 @@ function process_scatter(error, data_iter) {
         "Season": inv_season,
         "Sport": inv_sport,
         "Event": inv_event,
+        "NOC": inv_NOC,
+        "Games": inv_games, 
+        "Name": inv_names,
     };
 
 	//Start Building Frame
@@ -168,71 +193,88 @@ function process_scatter(error, data_iter) {
 	var margin = {top: 25*mult, bottom: 10*mult, left: 25*mult, right: 25*mult},
 	width = 700*mult - margin.left - margin.right,
 	height = 400*mult - margin.top - margin.bottom;
+    
+    if(reuse){
+        var svg =d3_elements["svg"];
+        var xScale = d3_elements["xscale"];
+        var yScale = d3_elements["yscale"];
 
-	var svg = d3.select("main div[id=scatter]").append("svg")
-	    .attr("width", width + margin.left + margin.right)
-	    .attr("height", height + margin.top + margin.bottom)
-	    .attr("id", "chart")
-	  .append("g")
-	    .attr("transform",
-	          "translate(" + margin.left + "," + margin.top + ")");
+        var xAxis = d3_elements["xaxis"];
+        var yAxis = d3_elements["yaxis"];
 
-    var xScale = d3.scaleLinear()
-        .range([margin.left, width - margin.right])
+        var ylabel = d3_elements["ylabel"];
+        var xlabel = d3_elements["xlabel"];
+        var title = d3_elements["title"];
 
-    var yScale = d3.scaleLinear()
-        .range([height - margin.bottom, margin.top])
+    } else {
+        var svg = d3.select("main div[id=scatter]").append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .attr("id", "chart")
+        .append("g")
+            .attr("transform",
+                "translate(" + margin.left + "," + margin.top + ")");
 
-    var yAxis = d3.axisLeft()
-        .scale(yScale);
+        d3_elements["svg"] = svg;
 
-    var xAxis = d3.axisBottom()
-        .scale(xScale)
+        var xScale = d3.scaleLinear()
+            .range([margin.left, width - margin.right])
 
-    svg.append("g")
-        .attr("transform", "translate(0," + (height - margin.bottom) + ")")
-        .attr("class", "x-axis")
-        .call(xAxis)
+        var yScale = d3.scaleLinear()
+            .range([height - margin.bottom, margin.top])
 
-    svg.append("g")
-        .attr("transform", "translate(" + margin.left + ",0)")
-        .attr("class", "y-axis")
-        .call(yAxis)
+        d3_elements["xscale"] = xScale;
+        d3_elements["yscale"] = yScale;
 
-    //Axis Labels
-        //Taken from http://bl.ocks.org/phoebebright/3061203
+        var yAxis = d3.axisLeft()
+            .scale(yScale);
 
-        // now rotate text on x axis
-    // solution based on idea here: https://groups.google.com/forum/?fromgroups#!topic/d3-js/heOBPQF3sAY
-    // first move the text left so no longer centered on the tick
-    // then rotate up to get 45 degrees.
-    svg.selectAll(".xaxis text")  // select all the text elements for the xaxis
-        .attr("transform", function(d) {
-        return "translate(" + this.getBBox().height*-2 + "," + this.getBBox().height + ")rotate(-45)";
-    });
-    var padding = 0;
-    // now add titles to the axes
+        var xAxis = d3.axisBottom()
+            .scale(xScale)
 
-        //y-axis
-    var ylabel = svg.append("text")
-        .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
-        .attr("transform", "translate("+ (padding/2) +","+(height/2)+")rotate(-90)");  // text is drawn off the screen top left, move down and out and rotate
+        d3_elements["xaxis"] = xAxis;
+        d3_elements["yaxis"] = yAxis;
+
+        svg.append("g")
+            .attr("transform", "translate(0," + (height - margin.bottom) + ")")
+            .attr("class", "x-axis")
+            .call(xAxis)
+
+        svg.append("g")
+            .attr("transform", "translate(" + margin.left + ",0)")
+            .attr("class", "y-axis")
+            .call(yAxis)
+
+        //Axis Labels
         
-    //x-axis
-    var xlabel = svg.append("text")
-        .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
-        .attr("transform", "translate("+ (width/2) +","+(height+(20))+")");  // centre below axis
-        
+        var padding = 0;
+        // now add titles to the axes
 
-    //title
-        //Taken from http://www.d3noob.org/2013/01/adding-title-to-your-d3js-graph.html
-    var svg = svg.append("text")
-    .attr("x", (width / 2))
-    .attr("y", 0 - (margin.top / 2))
-    .attr("text-anchor", "middle")
-    .style("font-size", "25px")
-    .style("text-decoration", "underline");
-    //End Building Frame
+            //y-axis
+        var ylabel = svg.append("text")
+            .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
+            .attr("transform", "translate("+ (padding/2) +","+(height/2)+")rotate(-90)");  // text is drawn off the screen top left, move down and out and rotate
+        
+        d3_elements["ylabel"]=ylabel;
+        //x-axis
+        var xlabel = svg.append("text")
+            .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
+            .attr("transform", "translate("+ (width/2) +","+(height+(20))+")");  // centre below axis
+            
+        d3_elements["xlabel"]=xlabel;
+
+        //title
+            //Taken from http://www.d3noob.org/2013/01/adding-title-to-your-d3js-graph.html
+        var title = svg.append("text")
+        .attr("x", (width / 2))
+        .attr("y", 0 - (margin.top / 2))
+        .attr("text-anchor", "middle")
+        .style("font-size", "25px")
+        .style("text-decoration", "underline");
+        //End Building Frame
+
+        d3_elements["title"] = title;
+    }
 
     function label_classes(axis, feat){
         
@@ -242,7 +284,6 @@ function process_scatter(error, data_iter) {
             //since this may just be nominal
             axis.ticks(Object.keys(feat_labels).length);
 
-            console.log(feat);
             axis.tickFormat(function(d,i){
                 
                 var keys = Object.keys(feat_labels).map((d)=>parseFloat(d));
@@ -273,38 +314,25 @@ function process_scatter(error, data_iter) {
         var x_feat = x_var.property("value")
         xlabel.text(x_feat);
         
-        svg.text(`${x_feat} vs ${y_var.property("value")}`);
+        title.text(`${x_feat} vs ${y_var.property("value")}`);
         
         var x_extent = d3.extent(parsedData, (d)=>d[x_feat]);
 
         x_extent = [x_extent[0]-0.25, x_extent[1]+0.25]
-        console.log(x_extent);
 
-        
         xScale.domain(x_extent);
 
-        /*if(Object.keys(class_labels).includes(x_feat)) {
-
-            console.log(x_feat);
-            xAxis.tickFormat(function(d,i){
-                feat_labels = class_labels[x_feat];
-                var keys = Object.keys(feat_labels).map((d)=>parseFloat(d));
-
-                label = "";
-                if(keys.includes(d)) {
-                    label = feat_labels[d];
-                }
-                return label;
-            })
-        }*/
         label_classes(xAxis, x_feat);
-
 
         d3.selectAll("body div[id=scatter] .x-axis")
                 .transition()
                 .duration(1000)
                 .call(xAxis)
                 .selectAll("text")
+                //adapted from https://bl.ocks.org/d3noob/3c040800ff6457717cca586ae9547dbf
+                .style("text-anchor", "end")
+                //.attr("dx", "-.8em")
+                //.attr("dy", ".15em")
                 .attr("transform", "rotate(-65)");
                 
         d3.selectAll("circle")
@@ -328,7 +356,7 @@ function process_scatter(error, data_iter) {
     y_var.on("change", function(){
         y_feat = y_var.property("value");
         ylabel.text(y_feat);
-        svg.text(`${x_var.property("value")} vs ${y_feat}`);
+        title.text(`${x_var.property("value")} vs ${y_feat}`);
         
         var y_extent = d3.extent(parsedData, (d)=>d[y_feat]);
 
@@ -357,7 +385,7 @@ function process_scatter(error, data_iter) {
 
     ylabel.text(y_var.property("value"));
     xlabel.text(x_var.property("value"));
-    svg.text(`${x_var.property("value")} vs ${y_var.property("value")}`);
+    title.text(`${x_var.property("value")} vs ${y_var.property("value")}`);
 
     var x_extent = d3.extent(parsedData, (d)=>d[x_var.property("value")]);
 
@@ -372,15 +400,46 @@ function process_scatter(error, data_iter) {
     //circles = 
     d3.select("body div[id=scatter] svg")
         .append("g")
-        .attr("transform", "translate(0," + (margin.top) + ")")
-        .attr("transform", "translate(" + margin.left + ",0)")
+        .attr("transform", `translate(${margin.left}, ${margin.top})`)
         .selectAll("circle")
         .data(parsedData)
         .enter()
         .append("circle")
-        .attr("r", 3)
+        .attr("r", 5)
         .attr("cx", function(d){return xScale(d[x_var.property("value")])})
-        .attr("cy", function(d){return yScale(d[y_var.property("value")])});
+        .attr("cy", function(d){return yScale(d[y_var.property("value")])})
+        .on("mousemove", function(d,i) {
+            var mouse = d3.mouse(svg.node()).map( function(d) { return parseInt(d); } );
+    
+            //ofsets
+            var switch_left = (mouse[0] + 600) > window.innerWidth;
+
+	        var offsetL = switch_left ? document.getElementById('container').offsetLeft-300 : document.getElementById('container').offsetLeft+300;
+	        var offsetT = document.getElementById('container').offsetTop-30;
+
+            tooltip.classed("hidden", false)
+            .attr("style", "left:"+(mouse[0]+offsetL)+"px;top:"+(mouse[1]+offsetT)+"px;width:20%;opacity:25%;")
+            .classed("text-truncate", true)
+            .html(`ID: ${d.ID}<br>
+                    Name: ${d.Name}<br>
+                    Sex: ${inv_sex[d.Sex]}<br>
+                    Age: ${d.Age}<br>
+                    Height: ${d.Height}<br>
+                    Weight:${d.Weight}<br>
+                    Team: ${inv_teams[d.Team]}<br>
+                    NOC: ${inv_NOC[d.NOC]}<br>
+                    Games: ${inv_games[d.Games]}<br>
+                    Year: ${d.Year}<br>
+                    Season: ${inv_season[d.Season]}<br>
+                    City: ${inv_city[d.City]}<br>
+                    Sport: ${inv_sport[d.Sport]}<br>
+                    Event: ${inv_event[d.Event]}<br>
+                    Medal: ${inv_medal[d.Medal]}<br>
+                    Country:${inv_country[d.Country]}`);
+        })
+        .on("mouseout",  function(d,i) {
+            tooltip.classed("hidden", true);
+        });
     
     d3.select("div[id=scatter] .x-axis")
         .transition()
@@ -389,6 +448,8 @@ function process_scatter(error, data_iter) {
     d3.select("div[id=scatter] .y-axis")
         .transition()
         .call(yAxis);
+
+    var tooltip = d3.select("body div[id=scatter]").append("div").attr("class", "tooltip hidden");
     
 
     
