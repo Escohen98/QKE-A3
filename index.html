@@ -7,31 +7,31 @@
 		<!--<script src="https://d3js.org/d3-geo.v1.min.js"></script>
 		<script src="https://d3js.org/d3-selection.v1.min.js"></script>
 		<script src="https://d3js.org/d3-array.v1.min.js"></script>
-		
+
 		<script src="https://d3js.org/d3-collection.v0.1.min.js"></script>
 		<script src="https://d3js.org/d3-dispatch.v0.4.min.js"></script>
 		<script src="https://d3js.org/d3-dsv.v0.3.min.js"></script>
 		<script src="https://d3js.org/d3-request.v0.4.min.js"></script>
 		<script src="https://d3js.org/d3-queue.v3.min.js"></script>-->
-		
+
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 		<link rel="stylesheet" type="text/css" href="Frontend/style.css">
-		
+
 		<script type="text/javascript">
 			var _gaq = _gaq || [];
 			_gaq.push(['_setAccount', 'UA-941940-28']);
 			_gaq.push(['_trackPageview']);
-		  
+
 			(function() {
 			  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
 			  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
 			  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 			})();
 		  </script>
-		  
+
 	</head>
 
 	<body>
@@ -55,9 +55,9 @@
 					<div id="top">
 					<!--     <h1>World Map in D3.js</h1>
 						<p>Country descriptions from CIA World Factbook, placed in tooltips. <a href="http://techslides.com/making-maps-from-cia-world-factbook/">Back to Article</a></p> -->
-					
+
 					</div>
-				
+
 					<h1>World Map with Olympics Medals</h1>
 					<div id = "top-field">
 						<div id="legend"></div>
@@ -72,28 +72,28 @@
 					<div id="container"></div>
 				</div>
 				<div class="tab-pane fade show" id="bar">
-					<div> 
+					<div>
 						<input id="yvis" type="checkbox" checked = "checked"> Year:
 						<span id="yhide">
-							<input type="range" min="1896" max="2016" value="1950" step="4" class="slider" id="year">
+							<input type="range" min="1896" max="2016" value="1950" step="2" class="slider" id="year">
 							<span class ="val" id="yearval">1950</span>
 						<span>
 					</div>
-					<div> 
+					<div>
 						<input id="avis" type="checkbox"> Age:
 						<span id="ahide" class="hidden">
 							<input type="range" min="10" max="97" value="50" class="slider" id="age">
 							<span class ="val" id="ageval">50</span> years
 						<span>
 					</div>
-					<div> 
+					<div>
 						<input id="hvis" type="checkbox"> Height:
 						<span id="hhide" class="hidden">
 							<input type="range" min="127" max="226" value="150" class="slider" id="height">
 							<span class ="val" id="heightval">150</span> cm
 						</span>
 					</div>
-					<div> 
+					<div>
 						<input id="wvis" type="checkbox"> Weight:
 						<span id="whide" class="hidden">
 							<input type="range" min="25" max="214" value="50" class="slider" id="weight">
@@ -105,7 +105,7 @@
 					<div> Only Medals? <input id="medals" type="checkbox"> </div>
 					<p>Total Number of Olympians: <span id="total">0</span></p>
 				</div>
-				
+
 				<div class="tab-pane fade show" id="scatter">
 					<h1>Scatter</h1>
 					<h2 class="text-center">Hover over a point to see all details about it.</h2>
@@ -217,7 +217,7 @@ var color = d3.scaleThreshold()
 	.attr("d", path)
 	.attr("id", function(d,i) { return d.id; })
 	.attr("title", function(d,i) { return d.properties.name; })
-	.style("fill", function(d,i) { 
+	.style("fill", function(d,i) {
 		var m = Medal.filter(function(f){return f.country == d.id});
 		if(m.length>0){
 			return color(m[0].Medal);
@@ -315,5 +315,5 @@ var color = d3.scaleThreshold()
 }
 </script>
 
-	
+
 </html>
